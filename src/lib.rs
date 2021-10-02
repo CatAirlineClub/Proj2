@@ -99,7 +99,7 @@ fn feedback_twospace(target: [Location; 3], Location(guess): Location) -> i32 { 
 pub fn initial_guess() -> ([Location; 3], GameState) {
     let game_state = GameState::init();
 
-    (game_state.0.iter().next().unwrap().0.clone(), game_state)
+    ([Location(0), Location(1), Location(2)], game_state)
 }
 
 #[cfg(test)]
