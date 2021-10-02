@@ -8,7 +8,7 @@ pub fn to_location(s: &str) -> Option<Location> {
 }
 
 pub fn from_location(Location(loc): Location) -> String {
-    format!("{}{}", loc % 4 + b'A', loc / 4 + b'1')
+    format!("{}{}", (loc / 4 + b'A') as char, (loc % 4 + b'1') as char)
 }
 
 #[cfg(test)]
