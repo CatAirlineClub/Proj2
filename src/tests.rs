@@ -1,4 +1,3 @@
-
 #[test]
 fn it_works() {
     use crate::*;
@@ -55,4 +54,35 @@ fn test(locations: (&str, &str, &str), guess: (&str, &str, &str), feedback: (i32
     let value = crate::feedback(locations_array, guess_array);
     assert_eq!(value, feedback,
         "{:?} {:?} expect {:?} got {:?}", locations, guess, feedback, value);
+}
+
+#[test]
+fn test_guess() {
+    use rand::Rng;
+    use crate::*;
+    let mut rng = rand::thread_rng();
+    let one = rng.gen_range(0..32 - 2);
+    let two = one + rng.gen_range(1..32 - 1 - one);
+    let three = two + rng.gen_range(1..32 - two);
+
+    let locations = [Location(one), Location(two), Location(three)];
+
+    let mut guess_prob = initial_guess();
+
+    //println!("locations {:?}",
+    //    locations.iter().map(|x| from_location(*x)).collect::<String>());
+
+    //println!("initial guess {:?}",
+    //    guess_prob.0.iter().map(|x| from_location(*x)).collect::<String>());
+
+    loop {
+        let guess = guess_prob.0.clone();
+        let feedback = feedback(locations, guess);
+        if feedback.0 == 3 {
+            break;
+        }
+        //println!("guessing {}",
+        //    guess.iter().map(|x| from_location(*x)).collect::<String>());
+        guess_prob = next_guess(guess_prob, feedback);
+    }
 }

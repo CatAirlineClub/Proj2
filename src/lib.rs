@@ -102,5 +102,12 @@ pub fn initial_guess() -> ([Location; 3], GameState) {
     ([Location(0), Location(1), Location(2)], game_state)
 }
 
+pub fn next_guess((guess, game_state): ([Location; 3], GameState), feedback: (i32, i32, i32)) -> ([Location; 3], GameState) {
+    if feedback.0 == 3 {
+        return (guess, game_state)
+    }
+    (*game_state.0.get(&guess).unwrap(), game_state)
+}
+
 #[cfg(test)]
 mod tests;
