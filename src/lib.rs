@@ -1,8 +1,29 @@
-pub struct GameState;
+use std::collections::HashMap;
+
+pub struct GameState(HashMap<[Location; 3], [Location; 3]>);
+
+impl GameState {
+    fn init() -> Self {
+        let mut map = HashMap::new();
+        let mut last = None;
+        for i in 0 .. 32 {
+            for j in i + 1 .. 32 {
+                for k in j + 1 .. 32 {
+                    let curr = [Location(i), Location(j), Location(k)];
+                    if let Some(last) = last {
+                        map.insert(last, curr);
+                    }
+                    last = Some(curr);
+                }
+            }
+        }
+        Self(map)
+    }
+}
 
 #[derive(PartialEq, Eq)]
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Hash)]
 pub struct Location(i8);
 
 pub fn to_location(s: &str) -> Option<Location> {
@@ -51,8 +72,8 @@ fn feedback_onespace(target: [Location; 3], Location(guess): Location) -> i32 { 
     ];
     for i in 0 .. 3 {
         if onespace.contains(&target[i].0) {
-            println!("guess {} matching onespace from {}",
-                from_location(Location(guess)), from_location(target[i]));
+            //println!("guess {} matching onespace from {}",
+            //    from_location(Location(guess)), from_location(target[i]));
             return 1;
         }
     }
@@ -73,6 +94,12 @@ fn feedback_twospace(target: [Location; 3], Location(guess): Location) -> i32 { 
         }
     }
     return 0;
+}
+
+pub fn initial_guess() -> ([Location; 3], GameState) {
+    let game_state = GameState::init();
+
+    (game_state.0.iter().next().unwrap().0.clone(), game_state)
 }
 
 #[cfg(test)]
